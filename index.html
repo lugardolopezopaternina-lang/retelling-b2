@@ -46,7 +46,7 @@
       </h1>
       <div class="flex items-center gap-2 text-slate-600 font-semibold text-sm">
         <i class="fa-solid fa-globe text-teal-700 text-lg"></i>
-        <span>English (B2 Assessment)</span>
+        <span>English (B2 Rigorous Assessment)</span>
       </div>
     </header>
 
@@ -74,10 +74,10 @@
       </div>
     </div>
 
-    <!-- Contenedor Principal -->
+    <!-- Contenedor Principal (2 Columnas) -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
-      <!-- Columna Izquierda: Altavoz + Módulos -->
+      <!-- Columna Izquierda: Altavoz + Módulos PLAY y RECORD -->
       <div class="lg:col-span-8 flex flex-col sm:flex-row gap-6">
         
         <!-- Altavoz del examen -->
@@ -93,7 +93,7 @@
           <span class="text-xs italic text-teal-700 font-semibold mt-2 leading-tight">Click to hear recording</span>
         </div>
 
-        <!-- Cajas centrales PLAY y RECORD -->
+        <!-- Cajas de Control Central -->
         <div class="flex-1 bg-white border border-slate-300 rounded shadow-sm p-5 md:p-6">
           <p class="text-sm font-semibold text-slate-700 leading-relaxed mb-6">
             You will hear a short story. After the story, you will have 30 seconds to retell the story in English. Try to retell as much of the story as you can, including the situation, characters, actions, and ending.
@@ -132,7 +132,6 @@
               <div class="bar-track flex-1 h-3 rounded-sm overflow-hidden relative">
                 <div id="recordProgress" class="bg-red-500 h-full w-0 transition-all duration-100"></div>
               </div>
-              <!-- Indicador de señal / medidor VU -->
               <div class="flex items-end gap-1 h-4 w-12 px-1 justify-center" id="vuMeter">
                 <div class="vu-meter-bar h-1"></div>
                 <div class="vu-meter-bar h-1"></div>
@@ -143,7 +142,7 @@
             </div>
           </div>
 
-          <!-- Captura de voz y evaluación -->
+          <!-- Transcripción y Evaluación -->
           <div class="mt-5 pt-4 border-t border-slate-200">
             <div class="flex items-center justify-between mb-1.5">
               <label class="text-xs font-bold uppercase tracking-wider text-slate-500">Student Speech Capture (English only):</label>
@@ -173,22 +172,22 @@
         <div>
           <h2 class="font-bold italic text-slate-900 text-base mb-1.5 font-serif">What is being tested?</h2>
           <p class="text-xs md:text-sm text-slate-600 leading-relaxed">
-            This question tests listening comprehension, task completion, grammar accuracy (B2 narrative structures), and English spoken fluency.
+            This question tests listening comprehension, task completion, narrative grammar accuracy (B2), and fluency.
           </p>
         </div>
         <div class="pt-4 border-t border-teal-200/60">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-teal-900 mb-2">B2 Evaluation Criteria:</h3>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-teal-900 mb-2">B2 Scoring Matrix (10 pts):</h3>
           <ul class="text-xs text-slate-600 space-y-1.5">
-            <li>• <strong>Task & Content (0-4 pts):</strong> Mentions characters, main problem, actions, and ending.</li>
-            <li>• <strong>Grammar Accuracy (0-3 pts):</strong> Past Perfect, Continuos, or Future Perfect structures.</li>
-            <li>• <strong>Fluency & Cohesion (0-3 pts):</strong> Connectors (<em>although, because, by</em>), vocabulary range, and spoken length.</li>
+            <li>• <strong>Task & Content (5.0 pts):</strong> Mentions characters, setting, actions, and ending.</li>
+            <li>• <strong>Grammar Accuracy (3.0 pts):</strong> Correct narrative tenses (past, continuous, future perfect).</li>
+            <li>• <strong>Fluency & Cohesion (2.0 pts):</strong> Connectors, volume, and spoken length in English.</li>
           </ul>
         </div>
       </div>
 
     </div>
 
-    <!-- Modal de Evaluación B2 Rigurosa -->
+    <!-- Modal de Evaluación Pedagógica -->
     <div id="evalModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <div class="bg-white rounded-lg shadow-2xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
         <div class="flex justify-between items-center border-b pb-3 mb-4">
@@ -206,142 +205,130 @@
 
   </div>
 
-  <!-- Audio Element Oculto -->
   <audio id="audioPlayer" preload="auto"></audio>
 
   <script>
-    // BASE DE DATOS DE HISTORIAS CON GUIONES Y CONCEPTOS CLAVE OBLIGATORIOS
+    // BASE DE DATOS DE LAS 10 HISTORIAS CON SINÓNIMOS Y CONCEPTOS CLAVE AMPLIADOS
     const storiesData = [
       {
         id: 1,
         title: "Emma in Paris",
         files: ["AUDIOUNO.mp3", "audiouno.mp3"],
         text: "Emma had never traveled abroad before she decided to sign up for an intensive French course in Paris. She is currently staying with a local family to practice her conversation skills every day, and by next week, she will have completed the first month of the program successfully.",
-        // Conceptos obligatorios para validar contenido
-        coreConcepts: [
-          { name: "Emma", regex: /\b(emma|woman|girl|student|she)\b/i },
-          { name: "Paris / French course", regex: /\b(paris|france|french|abroad|course|study|trip)\b/i },
-          { name: "Host family / Practice", regex: /\b(family|staying|practice|conversation|house)\b/i },
-          { name: "Completion / Ending", regex: /\b(month|program|finish|finished|completed|next week)\b/i }
-        ],
-        idealTenses: ["had never traveled", "is staying", "will have completed"]
+        elements: [
+          { label: "Personaje (Emma / la estudiante)", regex: /\b(emma|woman|girl|student|she)\b/i },
+          { label: "Viaje / París / Curso de francés", regex: /\b(paris|france|french|abroad|course|travel|traveled|study|studying|trip)\b/i },
+          { label: "Familia local / Práctica de conversación", regex: /\b(family|staying|stay|lives|living|practice|practicing|conversation|host)\b/i },
+          { label: "Mes completado / Desenlace próximo", regex: /\b(month|program|finish|finished|completed|complete|next week)\b/i }
+        ]
       },
       {
         id: 2,
         title: "David's Half-Marathon",
         files: ["AUDIODOS.mp3", "audiodos.mp3"],
         text: "David has been running five kilometers every morning because he wants to participate in his city’s annual half-marathon. Although his legs were aching constantly during the first few sessions, he is feeling much stronger now, and if he sticks to his routine, he will be ready for the race by October.",
-        coreConcepts: [
-          { name: "David / Runner", regex: /\b(david|man|guy|runner|he)\b/i },
-          { name: "Running / Marathon", regex: /\b(run|running|kilometers|marathon|race)\b/i },
-          { name: "Pain / Legs aching", regex: /\b(leg|legs|ache|aching|pain|hurt|hard|tired|stronger)\b/i },
-          { name: "October / Ready", regex: /\b(october|routine|ready|participate|finish)\b/i }
-        ],
-        idealTenses: ["has been running", "were aching", "will be ready"]
+        elements: [
+          { label: "Personaje (David / el corredor)", regex: /\b(david|man|runner|guy|athlete|he)\b/i },
+          { label: "Entrenamiento / Correr maratón", regex: /\b(run|running|kilometer|kilometers|marathon|race|training|trains)\b/i },
+          { label: "Dolor en piernas / Rutina y mejoría", regex: /\b(leg|legs|ache|aching|pain|hurt|stronger|routine|tired)\b/i },
+          { label: "Preparado para octubre", regex: /\b(october|ready|participate|race|finish)\b/i }
+        ]
       },
       {
         id: 3,
         title: "Sophie and Mark's Kitchen",
         files: ["AUDIOTRES.mp3", "audiotres.mp3"],
         text: "Sophie and Mark had been planning to remodel their kitchen for over a year before they finally hired a local carpenter. They are currently washing dishes in the bathroom sink while the work continues, but according to the contract, the workers will have finished the entire project by Friday evening.",
-        coreConcepts: [
-          { name: "Sophie & Mark / Couple", regex: /\b(sophie|mark|couple|they|people)\b/i },
-          { name: "Remodeling Kitchen", regex: /\b(kitchen|remodel|renovat|house|carpenter)\b/i },
-          { name: "Washing dishes in bathroom", regex: /\b(dish|dishes|bathroom|sink|wash)\b/i },
-          { name: "Friday completion", regex: /\b(friday|contract|workers|finish|finished)\b/i }
-        ],
-        idealTenses: ["had been planning", "are washing", "will have finished"]
+        elements: [
+          { label: "Personajes (Sophie y Mark / la pareja)", regex: /\b(sophie|mark|couple|they|family|people)\b/i },
+          { label: "Remodelar la cocina / Carpintero", regex: /\b(kitchen|remodel|remodeling|renovat|carpenter|house|home)\b/i },
+          { label: "Lavar platos en el baño", regex: /\b(dish|dishes|bathroom|sink|wash|washing)\b/i },
+          { label: "Terminar la obra el viernes", regex: /\b(friday|contract|workers|finish|finished|project|completed)\b/i }
+        ]
       },
       {
         id: 4,
         title: "Lucas's Puppy",
         files: ["AUDIOCUATRO.mp3", "audiocuatro.mp3"],
         text: "Lucas had never owned a dog before he visited the animal rescue shelter near his neighborhood last Saturday. He is now buying food, toys, and a warm bed, and as soon as the adoption papers are approved, he will be bringing his new puppy home.",
-        coreConcepts: [
-          { name: "Lucas", regex: /\b(lucas|boy|man|he)\b/i },
-          { name: "Adopting a dog/puppy", regex: /\b(dog|puppy|shelter|animal|rescue)\b/i },
-          { name: "Supplies / Food / Bed", regex: /\b(buy|buying|food|toy|toys|bed)\b/i },
-          { name: "Adoption approved / Home", regex: /\b(adopt|adoption|paper|papers|home|bring)\b/i }
-        ],
-        idealTenses: ["had never owned", "is buying", "will be bringing"]
+        elements: [
+          { label: "Personaje (Lucas)", regex: /\b(lucas|boy|man|guy|he)\b/i },
+          { label: "Refugio animal / Adoptar un perro", regex: /\b(dog|puppy|shelter|rescue|adopt|adoption|animal)\b/i },
+          { label: "Comprar suministros (comida, cama, juguetes)", regex: /\b(buy|buying|food|toy|toys|bed|supplies)\b/i },
+          { label: "Papeles aprobados / Llevarlo a casa", regex: /\b(paper|papers|approved|home|bring|bringing|house)\b/i }
+        ]
       },
       {
         id: 5,
         title: "Julian's Mystery Novel",
         files: ["AUDIOCINCO.mp3", "audiocinco.mp3"],
         text: "Julian has been writing a mystery novel in his spare time since he finished university three years ago. Even though he struggles to find enough quiet hours between his regular job and family duties, he expects that he will have written the final chapter before the year ends.",
-        coreConcepts: [
-          { name: "Julian / Writer", regex: /\b(julian|man|writer|author|he)\b/i },
-          { name: "Mystery Book/Novel", regex: /\b(book|novel|mystery|story|write|writing)\b/i },
-          { name: "Struggling with time/job", regex: /\b(time|job|work|busy|family|duty|hours)\b/i },
-          { name: "Finishing chapter / Year ends", regex: /\b(chapter|final|finish|year|end|ends)\b/i }
-        ],
-        idealTenses: ["has been writing", "struggles", "will have written"]
+        elements: [
+          { label: "Personaje (Julian / el escritor)", regex: /\b(julian|man|writer|author|he)\b/i },
+          { label: "Escribir novela / Libro de misterio", regex: /\b(novel|mystery|book|writing|written|write|story)\b/i },
+          { label: "Poco tiempo / Trabajo regular y familia", regex: /\b(time|job|work|busy|family|spare time|struggle|struggles|hours)\b/i },
+          { label: "Capítulo final / Antes de fin de año", regex: /\b(chapter|final|finish|finished|year ends|year)\b/i }
+        ]
       },
       {
         id: 6,
         title: "Valeria's Candle Store",
         files: ["AUDIOSEIS.mp3", "audioseis.mp3"],
         text: "Valeria had worked in retail customer service for years before she launched an online store selling handmade candles. She is currently packing dozens of orders every weekend, and if sales continue to grow at this rate, she will have recovered her initial investment by December.",
-        coreConcepts: [
-          { name: "Valeria", regex: /\b(valeria|she|woman)\b/i },
-          { name: "Candle Business / Online store", regex: /\b(candle|candles|store|business|online|handmade|sell)\b/i },
-          { name: "Packing orders", regex: /\b(pack|packing|order|orders|weekend)\b/i },
-          { name: "December / Investment", regex: /\b(december|invest|investment|sales|money)\b/i }
-        ],
-        idealTenses: ["had worked", "is packing", "will have recovered"]
+        elements: [
+          { label: "Personaje (Valeria / la emprendedora)", regex: /\b(valeria|woman|she|entrepreneur)\b/i },
+          { label: "Tienda online / Velas artesanales", regex: /\b(candle|candles|store|business|online|handmade|shop|selling)\b/i },
+          { label: "Empacar pedidos los fines de semana", regex: /\b(pack|packing|order|orders|weekend|weekends|customers)\b/i },
+          { label: "Recuperar inversión en diciembre", regex: /\b(december|invest|investment|sales|money|profit)\b/i }
+        ]
       },
       {
         id: 7,
         title: "Grandpa's Garden",
         files: ["AUDIOSIFTE.mp3", "AUDIOSIETE.mp3", "audiosiete.mp3"],
         text: "Grandpa had ignored the backyard for a long time, but two months ago, he started planting vegetables and herbs. He is watering the tomato plants every morning before the sun gets too hot, and by next month, he will have harvested his first fresh batch of vegetables.",
-        coreConcepts: [
-          { name: "Grandpa / Grandfather", regex: /\b(grandpa|grandfather|old man|he)\b/i },
-          { name: "Backyard / Garden / Planting", regex: /\b(backyard|garden|plant|planting|vegetables|herbs)\b/i },
-          { name: "Watering tomatoes", regex: /\b(water|watering|tomato|tomatoes|morning)\b/i },
-          { name: "Harvest / Next month", regex: /\b(harvest|harvested|next month|batch|fresh)\b/i }
-        ],
-        idealTenses: ["had ignored", "is watering", "will have harvested"]
+        elements: [
+          { label: "Personaje (Grandpa / el abuelo)", regex: /\b(grandpa|grandfather|old man|he)\b/i },
+          { label: "Patio / Plantar vegetales y hierbas", regex: /\b(backyard|garden|plant|planting|vegetable|vegetables|herbs)\b/i },
+          { label: "Regar los tomates por la mañana", regex: /\b(water|watering|tomato|tomatoes|morning|sun)\b/i },
+          { label: "Cosechar el próximo mes", regex: /\b(harvest|harvested|next month|batch|fresh|produce)\b/i }
+        ]
       },
       {
         id: 8,
         title: "Leo's Live Gig",
         files: ["AUDIOOCHO.mp3", "audioocho.mp3"],
         text: "Leo had been practicing the acoustic guitar for hours every afternoon because his band has an upcoming live gig at a community festival. Although he still feels a bit nervous about performing on stage, his bandmates believe that everyone will have mastered their songs by Friday.",
-        coreConcepts: [
-          { name: "Leo / Musician", regex: /\b(leo|he|boy|guy)\b/i },
-          { name: "Guitar / Band / Gig", regex: /\b(guitar|band|gig|concert|festival|music)\b/i },
-          { name: "Nervous / Stage", regex: /\b(nervous|stage|perform|performing|play)\b/i },
-          { name: "Mastered songs / Friday", regex: /\b(friday|song|songs|master|mastered|ready)\b/i }
-        ],
-        idealTenses: ["had been practicing", "feels", "will have mastered"]
+        elements: [
+          { label: "Personaje (Leo / el guitarrista)", regex: /\b(leo|boy|musician|guitarist|he)\b/i },
+          { label: "Guitarra / Banda / Concierto en festival", regex: /\b(guitar|band|gig|festival|concert|music|practicing)\b/i },
+          { label: "Nervios por actuar en el escenario", regex: /\b(nervous|stage|perform|performing|play|scared)\b/i },
+          { label: "Canciones dominadas para el viernes", regex: /\b(friday|mastered|songs|ready|master|bandmates)\b/i }
+        ]
       },
       {
         id: 9,
         title: "Camila's Computer",
         files: ["AUDIONUEVE.mp3", "audionueve.mp3"],
         text: "Camila has been trying to organize her computer files all afternoon because her hard drive was running out of storage space. She is backing up all her essential university assignments to the cloud, and once she deletes unnecessary folders, her laptop will be running much faster.",
-        coreConcepts: [
-          { name: "Camila", regex: /\b(camila|she|girl|student)\b/i },
-          { name: "Computer / Files / Storage", regex: /\b(computer|laptop|file|files|space|storage|drive)\b/i },
-          { name: "Backup / Cloud / University", regex: /\b(back|cloud|university|assignment|assignments|save)\b/i },
-          { name: "Running faster", regex: /\b(fast|faster|delete|deletes|folder|folders)\b/i }
-        ],
-        idealTenses: ["has been trying", "is backing up", "will be running"]
+        elements: [
+          { label: "Personaje (Camila / la estudiante)", regex: /\b(camila|girl|student|she)\b/i },
+          { label: "Archivos / Computadora sin espacio", regex: /\b(computer|laptop|file|files|space|storage|drive|disk)\b/i },
+          { label: "Copia en la nube / Tareas de la universidad", regex: /\b(cloud|backup|back up|university|assignments|homework|save)\b/i },
+          { label: "Borrar carpetas para que vaya más rápido", regex: /\b(delete|deletes|folder|folders|faster|fast|speed)\b/i }
+        ]
       },
       {
         id: 10,
         title: "Daniel's Healthy Habit",
         files: ["AUDIODIE7.mp3", "AUDIODIEZ.mp3", "audiodiez.mp3"],
         text: "Daniel used to eat fast food almost every evening, but his doctor advised him to change his lifestyle after a routine health check. He has been preparing his own meals with fresh vegetables for three weeks, and if he continues, he will have built a solid healthy habit before holidays start.",
-        coreConcepts: [
-          { name: "Daniel", regex: /\b(daniel|he|man|guy)\b/i },
-          { name: "Fast food / Doctor / Health", regex: /\b(food|fast food|doctor|health|lifestyle|eat)\b/i },
-          { name: "Cooking fresh vegetables", regex: /\b(meal|meals|cook|cooking|vegetable|vegetables|fresh)\b/i },
-          { name: "Healthy habit / Holidays", regex: /\b(habit|healthy|holiday|holidays|build|built)\b/i }
-        ],
-        idealTenses: ["used to eat", "has been preparing", "will have built"]
+        elements: [
+          { label: "Personaje (Daniel)", regex: /\b(daniel|man|guy|he)\b/i },
+          { label: "Comida rápida / Consejo del doctor", regex: /\b(fast food|doctor|health|lifestyle|advised|checkup|eat)\b/i },
+          { label: "Cocinar comidas con verduras frescas", regex: /\b(meal|meals|cook|cooking|vegetable|vegetables|fresh|preparing|food)\b/i },
+          { label: "Hábito saludable / Antes de vacaciones", regex: /\b(habit|healthy|holiday|holidays|built|build|routine)\b/i }
+        ]
       }
     ];
 
@@ -361,7 +348,7 @@
       transcriptBox.innerText = "Click the microphone button to start retelling the story...";
     }
 
-    // REPRODUCCIÓN DIRECTA
+    // REPRODUCCIÓN DIRECTA DEL ARCHIVO
     function playCurrentAudio() {
       if (!player.paused) {
         player.pause();
@@ -380,7 +367,7 @@
 
       function tryPlay() {
         if (fIdx >= candidates.length) {
-          playStatus.innerText = `Error: Audio no encontrado`;
+          playStatus.innerText = `Error: Archivo no encontrado`;
           playStatus.className = "text-center text-sm font-bold text-red-600 py-2";
           playIcon.className = "fa-solid fa-play";
           return;
@@ -429,7 +416,7 @@
       }, 1500);
     };
 
-    // GRABACIÓN DE VOZ (Speech Recognition + VU Meter)
+    // RECONOCIMIENTO DE VOZ Y VU METER
     let recognition;
     let isRecording = false;
     let countdownInterval;
@@ -576,7 +563,9 @@
       });
     }
 
-    // MOTOR DE EVALUACIÓN B2 RIGUROSO (SIN PISO DE PUNTOS)
+    // =========================================================================
+    // MOTOR DE EVALUACIÓN PEDAGÓGICA B2 (RIGUROSO Y BASADO EN PARÁFRASIS REAL)
+    // =========================================================================
     function evaluateRetelling() {
       const studentText = transcriptBox.innerText.trim();
       const currentStory = storiesData[currentIndex];
@@ -589,157 +578,166 @@
       const modal = document.getElementById('evalModal');
       const content = document.getElementById('evalContent');
 
-      // 1. FILTRO DE IDIOMA: Detectar palabras en español o números en español
-      const spanishDetect = /\b(el|la|los|las|un|una|uno|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|de|en|que|es|por|para|con|pero|porque|habia|estaba|tiene|amigo|casa)\b/i;
+      // 1. DETECCIÓN DE PATRONES EN ESPAÑOL O NONSENSE
+      const nonsensePattern = /\b(blah|bla|batman|la la la|soy|pork|cinco|mundo|uno|dos|tres|cuatro)\b/i;
+      const spanishDetect = /\b(el|la|los|las|un|una|uno|dos|tres|cuatro|cinco|de|en|que|es|por|para|con|pero|porque|habia|estaba|amigo|casa)\b/i;
       const isSpanish = spanishDetect.test(studentText);
+      const isNonsense = nonsensePattern.test(studentText);
 
-      // 2. Extracción de palabras
+      // Palabras habladas
       const words = studentText.split(/\s+/).filter(w => w.length > 0);
       const wordCount = words.length;
 
-      // 3. TASK COMPLETION: Evaluación de conceptos clave de la historia
-      let matchedCount = 0;
-      let missingConcepts = [];
+      // 2. TASK COMPLETION: Evaluación de los 4 elementos de la historia (acepta paráfrasis y sinónimos)
+      let matchedElements = [];
+      let missingElements = [];
 
-      currentStory.coreConcepts.forEach(concept => {
-        if (concept.regex.test(studentText)) {
-          matchedCount++;
+      currentStory.elements.forEach(item => {
+        if (item.regex.test(studentText)) {
+          matchedElements.push(item.label);
         } else {
-          missingConcepts.push(concept.name);
+          missingElements.push(item.label);
         }
       });
 
-      // Cálculo de Task Completion (0 a 4 puntos)
-      let taskScore = 0;
-      if (matchedCount === 1) taskScore = 1.0;
-      else if (matchedCount === 2) taskScore = 2.0;
-      else if (matchedCount === 3) taskScore = 3.2;
-      else if (matchedCount === 4) taskScore = 4.0;
+      const matchedCount = matchedElements.length;
 
-      // 4. GRAMMAR & STRUCTURES ACCURACY (0 a 3 puntos)
-      const hasPastNarrative = /\b(had\s+[a-z]+ed|had\s+been|had\s+never|decided|visited|started|used\s+to|was|were)\b/i.test(studentText);
+      // CÁLCULO DE TASK SCORE (0 a 5.0 puntos)
+      let taskScore = 0;
+      if (matchedCount === 1) taskScore = 1.2;
+      else if (matchedCount === 2) taskScore = 2.5;
+      else if (matchedCount === 3) taskScore = 4.0;
+      else if (matchedCount === 4) taskScore = 5.0;
+
+      // 3. GRAMMAR SCORE (0 a 3.0 puntos) - Solo cuenta si hay al menos 1 elemento de la historia
+      const hasPast = /\b(had\s+[a-z]+ed|had\s+been|had\s+never|decided|visited|started|used to|were|was|worked|ignored)\b/i.test(studentText);
       const hasContinuous = /\b(is|are|was|were|will be)\s+[a-z]+ing\b/i.test(studentText);
-      const hasFuturePerfect = /\b(will\s+have|will\s+be|will\s+have\s+been)\b/i.test(studentText);
-      const hasConditionOrTime = /\b(if|when|before|after|by next|once|as soon as)\b/i.test(studentText);
+      const hasFuturePerfect = /\b(will\s+have|will\s+have\s+been|will\s+be\s+ready)\b/i.test(studentText);
+      const hasConnectors = /\b(although|even though|because|so|before|after|if|by next|once|as soon as)\b/i.test(studentText);
 
       let grammarScore = 0;
-      if (hasPastNarrative) grammarScore += 1.0;
-      if (hasContinuous || hasConditionOrTime) grammarScore += 1.0;
-      if (hasFuturePerfect) grammarScore += 1.0;
+      if (matchedCount > 0) {
+        if (hasPast) grammarScore += 1.0;
+        if (hasContinuous || hasConnectors) grammarScore += 1.0;
+        if (hasFuturePerfect) grammarScore += 1.0;
+      }
 
-      // 5. FLUENCY & VOCABULARY RANGE (0 a 3 puntos)
+      // 4. FLUENCY SCORE (0 a 2.0 puntos)
       let fluencyScore = 0;
-      if (wordCount >= 15) fluencyScore += 1.0;
-      if (wordCount >= 28) fluencyScore += 1.0;
-      if (wordCount >= 40) fluencyScore += 1.0;
+      if (matchedCount > 0 && !isNonsense) {
+        if (wordCount >= 18) fluencyScore += 1.0;
+        if (wordCount >= 32) fluencyScore += 1.0;
+      }
 
-      // TOTALIZADOR
+      // 5. TOTALIZACIÓN Y FILTRO DE BLOQUEO TEMÁTICO
       let finalScore = taskScore + grammarScore + fluencyScore;
 
-      // PENALIZACIONES SEVERAS SI NO ES INGLÉS O NO TIENE RELACIÓN
-      if (isSpanish && matchedCount === 0) {
-        finalScore = Math.min(1.0, finalScore * 0.1); // Máximo 1.0 si habló en español
-      } else if (matchedCount === 0) {
-        finalScore = Math.min(2.0, finalScore * 0.25); // Máximo 2.0 si habló cosas sin relación
+      // BLOQUEO ABSOLUTO: Si no mencionó ningún elemento de la historia, es reprobación inmediata
+      if (matchedCount === 0) {
+        finalScore = Math.min(0.8, (wordCount > 5 ? 0.8 : 0.2));
+      } else if (matchedCount === 1) {
+        finalScore = Math.min(3.5, finalScore);
       }
 
       finalScore = Math.min(10.0, Math.max(0.0, finalScore));
 
-      // Determinación de Nivel CEFR Real
-      let cefrLevel = "A1 / Below A2 (Incompleto)";
+      // Nivel CEFR
+      let cefrBadge = "Below A2 (No Acreditable)";
       let scoreColor = "text-red-600";
       let bgScore = "bg-red-50 border-red-200";
 
       if (finalScore >= 8.5) {
-        cefrLevel = "B2 (Sólido / Competente)";
+        cefrBadge = "B2 (Competente / Retelling Completo)";
         scoreColor = "text-teal-700";
         bgScore = "bg-teal-50 border-teal-200";
       } else if (finalScore >= 6.5) {
-        cefrLevel = "B1+ / B2 en desarrollo";
+        cefrBadge = "B1+ (En desarrollo / Retelling Parcial)";
         scoreColor = "text-emerald-700";
         bgScore = "bg-emerald-50 border-emerald-200";
       } else if (finalScore >= 4.0) {
-        cefrLevel = "A2 / B1 Inicial";
+        cefrBadge = "A2 (Retelling Incompleto)";
         scoreColor = "text-amber-700";
         bgScore = "bg-amber-50 border-amber-200";
       }
 
-      // Generación de Fortalezas reales (sin inventar si la nota es baja)
-      let strengths = [];
-      if (finalScore >= 6.5) {
-        if (matchedCount >= 3) strengths.push("Excelente retención de la trama principal y sus personajes.");
-        if (grammarScore >= 2.0) strengths.push("Uso acertado de estructuras narrativas complejas (past / future perfect).");
-        if (wordCount >= 25) strengths.push("Fluidez y ritmo discursivo constante durante los 30 segundos.");
-      } else if (finalScore >= 4.0) {
-        if (matchedCount >= 2) strengths.push("Identificaste al menos la idea o personaje principal.");
-        if (wordCount >= 15) strengths.push("Intento comunicativo con longitud básica.");
+      // Retroalimentación diagnóstica
+      let feedbackList = [];
+      if (matchedCount === 0) {
+        feedbackList.push("<strong>Falta de contenido (Off-Topic):</strong> No mencionaste los hechos ni personajes de la historia original. El retelling debe resumir lo que escuchaste.");
+      }
+      if (isSpanish) {
+        feedbackList.push("<strong>Idioma incorrecto:</strong> Se detectaron palabras en español. La prueba evalúa producción oral exclusivamente en inglés.");
+      }
+      if (isNonsense) {
+        feedbackList.push("<strong>Coherencia discursiva:</strong> Tu discurso contiene palabras repetitivas o incoherentes que impiden entender la historia.");
+      }
+      if (missingElements.length > 0 && matchedCount > 0) {
+        feedbackList.push(`<strong>Puntos omitidos de la trama:</strong> Te faltó mencionar: <em>${missingElements.join(', ')}</em>.`);
+      }
+      if (matchedCount > 0 && !hasFuturePerfect) {
+        feedbackList.push("<strong>Estructura meta B2:</strong> Procura incluir la proyección o desenlace futuro usando <em>will have + past participle</em> o <em>by next...</em>.");
       }
 
-      // Aspectos a mejorar
-      let weaknesses = [];
-      if (isSpanish) {
-        weaknesses.push("<strong>Idioma incorrecto:</strong> El sistema detectó palabras en español. Debes recontar la historia 100% en inglés.");
-      }
-      if (matchedCount <= 1) {
-        weaknesses.push(`<strong>Falta de contenido (Task Incomplete):</strong> No mencionaste los elementos esenciales: <em>${missingConcepts.join(', ')}</em>.`);
-      }
-      if (wordCount < 20) {
-        weaknesses.push("<strong>Extensión insuficiente:</strong> Tu respuesta fue muy corta (" + wordCount + " palabras). Un retelling B2 requiere al menos 30-40 palabras para desarrollar la historia.");
-      }
-      if (!hasFuturePerfect && !hasContinuous) {
-        weaknesses.push("<strong>Estructura gramatical meta:</strong> No incluiste la proyección o desenlace de la historia (ej. <em>will have finished, will be ready</em>).");
+      // Puntos fuertes (SOLO si aprobó y tiene contenido real)
+      let strengthsList = [];
+      if (finalScore >= 6.5) {
+        strengthsList.push(`Identificaste con precisión los eventos clave (${matchedElements.join(', ')}).`);
+        if (hasPast) strengthsList.push("Buen uso de tiempos narrativos pasados.");
+        if (hasFuturePerfect) strengthsList.push("Uso sobresaliente de estructuras de futuro perfecto.");
+        if (hasConnectors) strengthsList.push("Cohesión discursiva adecuada mediante conectores.");
+      } else if (finalScore >= 4.0) {
+        strengthsList.push(`Lograste captar al menos parte de la idea principal (${matchedElements.join(', ')}).`);
       }
 
       content.innerHTML = `
         <div class="flex items-center gap-4 ${bgScore} p-4 rounded-lg border">
           <div class="text-4xl font-black ${scoreColor}">${finalScore.toFixed(1)} <span class="text-base text-slate-500 font-normal">/ 10</span></div>
           <div>
-            <div class="font-bold text-slate-800 text-sm md:text-base">Diagnóstico: ${cefrLevel}</div>
-            <div class="text-xs text-slate-500">${wordCount} palabras | ${matchedCount} de ${currentStory.coreConcepts.length} puntos de la historia mencionados</div>
+            <div class="font-bold text-slate-800 text-sm md:text-base">${cefrBadge}</div>
+            <div class="text-xs text-slate-500">${wordCount} palabras | ${matchedCount} de ${currentStory.elements.length} partes de la historia identificadas</div>
           </div>
         </div>
 
-        <!-- Desglose de Criterios Oficiales -->
         <div class="grid grid-cols-3 gap-2 text-center text-xs">
-          <div class="bg-slate-50 p-2 rounded border border-slate-200">
-            <span class="text-slate-400 block font-bold">Task Content</span>
-            <span class="font-bold text-slate-700 text-sm">${taskScore.toFixed(1)} / 4.0</span>
+          <div class="bg-slate-50 p-2.5 rounded border border-slate-200">
+            <span class="text-slate-400 block font-bold">Contenido del Retell</span>
+            <span class="font-bold ${matchedCount === 0 ? 'text-red-600' : 'text-slate-800'} text-sm">${taskScore.toFixed(1)} / 5.0</span>
           </div>
-          <div class="bg-slate-50 p-2 rounded border border-slate-200">
-            <span class="text-slate-400 block font-bold">B2 Grammar</span>
-            <span class="font-bold text-slate-700 text-sm">${grammarScore.toFixed(1)} / 3.0</span>
+          <div class="bg-slate-50 p-2.5 rounded border border-slate-200">
+            <span class="text-slate-400 block font-bold">Gramática B2</span>
+            <span class="font-bold text-slate-800 text-sm">${grammarScore.toFixed(1)} / 3.0</span>
           </div>
-          <div class="bg-slate-50 p-2 rounded border border-slate-200">
-            <span class="text-slate-400 block font-bold">Fluency & Length</span>
-            <span class="font-bold text-slate-700 text-sm">${fluencyScore.toFixed(1)} / 3.0</span>
+          <div class="bg-slate-50 p-2.5 rounded border border-slate-200">
+            <span class="text-slate-400 block font-bold">Fluidez y Léxico</span>
+            <span class="font-bold text-slate-800 text-sm">${fluencyScore.toFixed(1)} / 2.0</span>
           </div>
         </div>
 
         <div>
-          <h3 class="font-bold text-slate-700 text-xs uppercase tracking-wider mb-1">Tu Retelling (Transcrito):</h3>
+          <h3 class="font-bold text-slate-700 text-xs uppercase tracking-wider mb-1">Tu Retelling (Transcripción de voz):</h3>
           <p class="p-3 bg-slate-50 rounded border border-slate-200 text-xs md:text-sm text-slate-800 italic leading-relaxed">
             "${studentText}"
           </p>
         </div>
 
-        ${strengths.length > 0 ? `
+        ${strengthsList.length > 0 ? `
           <div>
-            <h3 class="font-bold text-teal-800 text-xs uppercase tracking-wider mb-1.5">Puntos Fuertes:</h3>
+            <h3 class="font-bold text-teal-800 text-xs uppercase tracking-wider mb-1.5">Puntos Fuertes Detectados:</h3>
             <ul class="list-disc pl-5 text-xs text-slate-700 space-y-1">
-              ${strengths.map(s => `<li>${s}</li>`).join('')}
+              ${strengthsList.map(s => `<li>${s}</li>`).join('')}
             </ul>
           </div>
         ` : ''}
 
-        ${weaknesses.length > 0 ? `
+        ${feedbackList.length > 0 ? `
           <div class="bg-amber-50 border border-amber-200 rounded p-3 text-xs text-amber-950 space-y-1.5">
-            <h4 class="font-bold uppercase tracking-wider text-[11px] text-amber-800">Aspectos Críticos a Corregir:</h4>
-            ${weaknesses.map(w => `<div>• ${w}</div>`).join('')}
+            <h4 class="font-bold uppercase tracking-wider text-[11px] text-amber-800">Aspectos a Corregir:</h4>
+            ${feedbackList.map(w => `<div>• ${w}</div>`).join('')}
           </div>
         ` : ''}
 
         <div class="bg-slate-50 border border-slate-200 rounded p-3">
-          <h4 class="font-bold text-slate-700 text-xs uppercase tracking-wider mb-1">Historia Original de Referencia:</h4>
+          <h4 class="font-bold text-slate-700 text-xs uppercase tracking-wider mb-1">Guion de la Historia Evaluada:</h4>
           <p class="text-xs text-slate-600 leading-relaxed">${currentStory.text}</p>
         </div>
       `;
