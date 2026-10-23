@@ -70,7 +70,7 @@
 
       <div class="flex items-center gap-2 text-xs text-slate-500">
         <span class="inline-block w-2.5 h-2.5 rounded-full bg-teal-600"></span>
-        <span id="currentAudioFileLabel" class="font-mono font-medium text-slate-600">AUDIOUNO</span>
+        <span id="currentAudioFileLabel" class="font-mono font-medium text-slate-600">AUDIOUNO.mp3</span>
       </div>
     </div>
 
@@ -82,4 +82,533 @@
         
         <!-- Altavoz del examen -->
         <div class="flex flex-col items-center justify-start pt-4 text-center sm:w-32 flex-shrink-0">
-          <button id="speakerIconBtn" onclick="playCurrentAudio()" title="Click to hear recording" class="focus:outline-none transition-transform hover:scale-105 active:scale
+          <button id="speakerIconBtn" onclick="playCurrentAudio()" title="Click to hear recording" class="focus:outline-none transition-transform hover:scale-105 active:scale-95 group">
+            <svg class="w-24 h-24 text-slate-400 group-hover:text-teal-700 transition-colors" viewBox="0 0 100 100" fill="currentColor">
+              <path d="M42 22 L24 38 H10 V62 H24 L42 78 Z" stroke="#788896" stroke-width="2.5" />
+              <ellipse cx="60" cy="50" rx="3.5" ry="9" stroke="#788896" stroke-width="2.5" fill="none" />
+              <ellipse cx="72" cy="50" rx="5" ry="17" stroke="#788896" stroke-width="2.5" fill="none" />
+              <ellipse cx="84" cy="50" rx="6.5" ry="25" stroke="#788896" stroke-width="2.5" fill="none" />
+            </svg>
+          </button>
+          <span class="text-xs italic text-teal-700 font-semibold mt-2 leading-tight">Click to hear recording</span>
+        </div>
+
+        <!-- Cajas centrales PLAY y RECORD -->
+        <div class="flex-1 bg-white border border-slate-300 rounded shadow-sm p-5 md:p-6">
+          <p class="text-sm font-semibold text-slate-700 leading-relaxed mb-6">
+            You will hear a short story. After the story, you will have 30 seconds to retell the story in English. Try to retell as much of the story as you can, including the situation, characters, actions, and ending.
+          </p>
+
+          <!-- PLAY MODULE -->
+          <div class="bevel-box rounded p-3 mb-5">
+            <div class="text-center font-bold text-xs tracking-widest text-slate-600 mb-1 border-b border-slate-300 pb-1">
+              PLAY
+            </div>
+            <div id="playStatus" class="status-text-ready text-center text-sm py-2">
+              Ready
+            </div>
+            <div class="flex items-center gap-3 px-2 pt-1">
+              <button id="btnPlay" onclick="playCurrentAudio()" class="w-7 h-7 flex items-center justify-center text-slate-700 hover:text-teal-700 transition-colors text-sm">
+                <i id="playIcon" class="fa-solid fa-play"></i>
+              </button>
+              <div class="bar-track flex-1 h-3 rounded-sm overflow-hidden relative">
+                <div id="playProgress" class="bg-teal-700 h-full w-0 transition-all duration-100"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RECORD MODULE -->
+          <div class="bevel-box rounded p-3">
+            <div class="text-center font-bold text-xs tracking-widest text-slate-600 mb-1 border-b border-slate-300 pb-1">
+              RECORD
+            </div>
+            <div id="recordStatus" class="text-center text-sm font-bold text-slate-500 py-2">
+              Ready to Record
+            </div>
+            <div class="flex items-center gap-3 px-2 pt-1">
+              <button id="btnRecord" onclick="toggleRecording()" class="w-7 h-7 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center text-xs shadow transition-colors">
+                <i id="recIcon" class="fa-solid fa-microphone"></i>
+              </button>
+              <div class="bar-track flex-1 h-3 rounded-sm overflow-hidden relative">
+                <div id="recordProgress" class="bg-red-500 h-full w-0 transition-all duration-100"></div>
+              </div>
+              <!-- Indicador de señal / medidor VU -->
+              <div class="flex items-end gap-1 h-4 w-12 px-1 justify-center" id="vuMeter">
+                <div class="vu-meter-bar h-1"></div>
+                <div class="vu-meter-bar h-1"></div>
+                <div class="vu-meter-bar h-1"></div>
+                <div class="vu-meter-bar h-1"></div>
+              </div>
+              <span id="countdownText" class="text-xs font-mono font-bold text-slate-700 w-8 text-right">30s</span>
+            </div>
+          </div>
+
+          <!-- Captura de voz y evaluación -->
+          <div class="mt-5 pt-4 border-t border-slate-200">
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="text-xs font-bold uppercase tracking-wider text-slate-500">Student Speech Capture:</label>
+              <button onclick="clearTranscript()" class="text-[11px] text-slate-400 hover:text-slate-600 underline">Clear text</button>
+            </div>
+            <div id="transcriptBox" class="w-full min-h-[75px] p-3 text-xs md:text-sm text-slate-700 bg-slate-50 rounded border border-slate-200 leading-relaxed font-sans" contenteditable="true">
+              Click the microphone button to start retelling the story...
+            </div>
+            
+            <button id="evalBtn" onclick="evaluateRetelling()" class="mt-4 w-full bg-[#0d8275] hover:bg-[#0a6c62] text-white text-xs font-bold py-3 px-4 rounded shadow transition-all flex items-center justify-center gap-2">
+              <i class="fa-solid fa-clipboard-check"></i>
+              <span>Submit & Evaluate Retelling</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Columna Derecha: Panel de Guía -->
+      <div class="lg:col-span-4 bg-[#e8f4f3] border border-[#c4e3e0] rounded-md p-6 text-slate-700 space-y-6">
+        <div>
+          <h2 class="font-bold italic text-slate-900 text-base mb-1.5 font-serif">What is being asked?</h2>
+          <p class="text-xs md:text-sm text-slate-600 leading-relaxed">
+            This question asks the learner to listen to a short narrative and then retell the narrative using their own words.
+          </p>
+        </div>
+        <div>
+          <h2 class="font-bold italic text-slate-900 text-base mb-1.5 font-serif">What is being tested?</h2>
+          <p class="text-xs md:text-sm text-slate-600 leading-relaxed">
+            This question tests listening and speaking. It assesses understanding of a short narrative, accuracy of complex grammatical structures, and oral fluency.
+          </p>
+        </div>
+        <div class="pt-4 border-t border-teal-200/60">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-teal-900 mb-2">B2 Target Structures:</h3>
+          <ul class="text-xs text-slate-600 space-y-1.5">
+            <li>• Past Perfect & Continuous narration</li>
+            <li>• Future Perfect (<em>will have completed</em>)</li>
+            <li>• Time clauses: <em>by, before, once, as soon as</em></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Modal de Evaluación B2 -->
+    <div id="evalModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+      <div class="bg-white rounded-lg shadow-2xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center border-b pb-3 mb-4">
+          <h2 class="text-lg md:text-xl font-bold text-slate-800">Evaluación de Retelling (Nivel B2)</h2>
+          <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 text-2xl font-bold leading-none">&times;</button>
+        </div>
+        <div id="evalContent" class="space-y-4 text-sm text-slate-700"></div>
+        <div class="mt-6 flex justify-end">
+          <button onclick="closeModal()" class="px-5 py-2.5 bg-[#0d8275] hover:bg-[#0a6c62] text-white text-xs font-bold rounded shadow">
+            Cerrar evaluación
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Audio Element Oculto -->
+  <audio id="audioPlayer" preload="auto"></audio>
+
+  <script>
+    // LISTA DE HISTORIAS CON LAS RUTAS REALES DE TU REPOSITORIO
+    const storiesData = [
+      {
+        id: 1,
+        title: "Emma in Paris",
+        files: ["AUDIOUNO.mp3", "audiouno.mp3"],
+        text: "Emma had never traveled abroad before she decided to sign up for an intensive French course in Paris. She is currently staying with a local family to practice her conversation skills every day, and by next week, she will have completed the first month of the program successfully.",
+        keywords: ["emma", "travel", "paris", "french", "family", "completed", "month"]
+      },
+      {
+        id: 2,
+        title: "David's Half-Marathon",
+        files: ["AUDIODOS.mp3", "audiodos.mp3"],
+        text: "David has been running five kilometers every morning because he wants to participate in his city’s annual half-marathon. Although his legs were aching constantly during the first few sessions, he is feeling much stronger now, and if he sticks to his routine, he will be ready for the race by October.",
+        keywords: ["david", "running", "marathon", "legs", "routine", "october", "race"]
+      },
+      {
+        id: 3,
+        title: "Sophie and Mark's Kitchen",
+        files: ["AUDIOTRES.mp3", "audiotres.mp3"],
+        text: "Sophie and Mark had been planning to remodel their kitchen for over a year before they finally hired a local carpenter. They are currently washing dishes in the bathroom sink while the work continues, but according to the contract, the workers will have finished the entire project by Friday evening.",
+        keywords: ["sophie", "mark", "remodel", "kitchen", "dishes", "contract", "friday"]
+      },
+      {
+        id: 4,
+        title: "Lucas's Puppy",
+        files: ["AUDIOCUATRO.mp3", "audiocuatro.mp3"],
+        text: "Lucas had never owned a dog before he visited the animal rescue shelter near his neighborhood last Saturday. He is now buying food, toys, and a warm bed, and as soon as the adoption papers are approved, he will be bringing his new puppy home.",
+        keywords: ["lucas", "dog", "shelter", "puppy", "adoption", "papers", "home"]
+      },
+      {
+        id: 5,
+        title: "Julian's Mystery Novel",
+        files: ["AUDIOCINCO.mp3", "audiocinco.mp3"],
+        text: "Julian has been writing a mystery novel in his spare time since he finished university three years ago. Even though he struggles to find enough quiet hours between his regular job and family duties, he expects that he will have written the final chapter before the year ends.",
+        keywords: ["julian", "novel", "writing", "university", "chapter", "year ends", "mystery"]
+      },
+      {
+        id: 6,
+        title: "Valeria's Candle Store",
+        files: ["AUDIOSEIS.mp3", "audioseis.mp3"],
+        text: "Valeria had worked in retail customer service for years before she launched an online store selling handmade candles. She is currently packing dozens of orders every weekend, and if sales continue to grow at this rate, she will have recovered her initial investment by December.",
+        keywords: ["valeria", "store", "candles", "orders", "investment", "december", "sales"]
+      },
+      {
+        id: 7,
+        title: "Grandpa's Garden",
+        // Soporta tanto AUDIOSIFTE como AUDIOSIETE
+        files: ["AUDIOSIFTE.mp3", "AUDIOSIETE.mp3", "audiosiete.mp3"],
+        text: "Grandpa had ignored the backyard for a long time, but two months ago, he started planting vegetables and herbs. He is watering the tomato plants every morning before the sun gets too hot, and by next month, he will have harvested his first fresh batch of vegetables.",
+        keywords: ["grandpa", "backyard", "vegetables", "tomato", "harvested", "month", "plants"]
+      },
+      {
+        id: 8,
+        title: "Leo's Live Gig",
+        files: ["AUDIOOCHO.mp3", "audioocho.mp3"],
+        text: "Leo had been practicing the acoustic guitar for hours every afternoon because his band has an upcoming live gig at a community festival. Although he still feels a bit nervous about performing on stage, his bandmates believe that everyone will have mastered their songs by Friday.",
+        keywords: ["leo", "guitar", "band", "gig", "festival", "mastered", "songs", "friday"]
+      },
+      {
+        id: 9,
+        title: "Camila's Computer",
+        files: ["AUDIONUEVE.mp3", "audionueve.mp3"],
+        text: "Camila has been trying to organize her computer files all afternoon because her hard drive was running out of storage space. She is backing up all her essential university assignments to the cloud, and once she deletes unnecessary folders, her laptop will be running much faster.",
+        keywords: ["camila", "computer", "files", "cloud", "laptop", "storage", "faster"]
+      },
+      {
+        id: 10,
+        title: "Daniel's Healthy Habit",
+        // Soporta tanto AUDIODIE7 como AUDIODIEZ
+        files: ["AUDIODIE7.mp3", "AUDIODIEZ.mp3", "audiodiez.mp3"],
+        text: "Daniel used to eat fast food almost every evening, but his doctor advised him to change his lifestyle after a routine health check. He has been preparing his own meals with fresh vegetables for three weeks, and if he continues, he will have built a solid healthy habit before holidays start.",
+        keywords: ["daniel", "fast food", "doctor", "healthy", "meals", "vegetables", "habit"]
+      }
+    ];
+
+    let currentIndex = 0;
+    const player = document.getElementById('audioPlayer');
+    const playStatus = document.getElementById('playStatus');
+    const playProgress = document.getElementById('playProgress');
+    const playIcon = document.getElementById('playIcon');
+    const transcriptBox = document.getElementById('transcriptBox');
+    const currentAudioFileLabel = document.getElementById('currentAudioFileLabel');
+
+    function changeExercise(idx) {
+      currentIndex = parseInt(idx, 10);
+      currentAudioFileLabel.innerText = storiesData[currentIndex].files[0];
+      stopAudio();
+      resetRecording();
+      transcriptBox.innerText = "Click the microphone button to start retelling the story...";
+    }
+
+    // REPRODUCCIÓN DIRECTA DESDE LA RAÍZ DEL REPOSITORIO
+    function playCurrentAudio() {
+      if (!player.paused) {
+        player.pause();
+        playStatus.innerText = "Paused";
+        playIcon.className = "fa-solid fa-play";
+        return;
+      }
+
+      const story = storiesData[currentIndex];
+      const candidates = story.files;
+
+      playStatus.innerText = "Loading audio...";
+      playStatus.className = "text-center text-sm font-bold text-slate-500 py-2";
+
+      let fIdx = 0;
+
+      function tryPlay() {
+        if (fIdx >= candidates.length) {
+          playStatus.innerText = `Error: Archivo no encontrado`;
+          playStatus.className = "text-center text-sm font-bold text-red-600 py-2";
+          playIcon.className = "fa-solid fa-play";
+          return;
+        }
+
+        const currentTarget = candidates[fIdx];
+        fIdx++;
+
+        player.src = currentTarget;
+        player.play().then(() => {
+          playStatus.innerText = "Playing...";
+          playStatus.className = "text-center text-sm font-bold text-teal-800 py-2";
+          playIcon.className = "fa-solid fa-pause";
+          currentAudioFileLabel.innerText = currentTarget;
+        }).catch(() => {
+          tryPlay();
+        });
+      }
+
+      tryPlay();
+    }
+
+    function stopAudio() {
+      player.pause();
+      player.currentTime = 0;
+      playStatus.innerText = "Ready";
+      playStatus.className = "status-text-ready text-center text-sm py-2";
+      playProgress.style.width = "0%";
+      playIcon.className = "fa-solid fa-play";
+    }
+
+    player.ontimeupdate = () => {
+      if (player.duration) {
+        const pct = (player.currentTime / player.duration) * 100;
+        playProgress.style.width = pct + "%";
+      }
+    };
+
+    player.onended = () => {
+      playStatus.innerText = "Finished";
+      playIcon.className = "fa-solid fa-play";
+      setTimeout(() => {
+        playStatus.innerText = "Ready";
+        playStatus.className = "status-text-ready text-center text-sm py-2";
+        playProgress.style.width = "0%";
+      }, 1500);
+    };
+
+    // GRABACIÓN DE VOZ (Speech Recognition + VU Meter)
+    let recognition;
+    let isRecording = false;
+    let countdownInterval;
+    let timeLeft = 30;
+    let capturedTranscript = "";
+    let audioContext, analyser, microphone, javascriptNode;
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+      recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = (event) => {
+        let interim = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            capturedTranscript += event.results[i][0].transcript + ' ';
+          } else {
+            interim += event.results[i][0].transcript;
+          }
+        }
+        transcriptBox.innerText = (capturedTranscript + interim).trim();
+      };
+
+      recognition.onerror = (e) => {
+        console.error("SpeechRecognition error:", e);
+      };
+    }
+
+    function toggleRecording() {
+      if (!isRecording) {
+        startRecording();
+      } else {
+        stopRecording();
+      }
+    }
+
+    async function startRecording() {
+      if (!recognition) {
+        alert("Tu navegador no soporta Speech Recognition. Utiliza Google Chrome o Microsoft Edge.");
+        return;
+      }
+
+      stopAudio();
+      capturedTranscript = "";
+      transcriptBox.innerText = "";
+      recognition.start();
+      isRecording = true;
+      timeLeft = 30;
+
+      document.getElementById('recIcon').className = "fa-solid fa-square";
+      document.getElementById('recordStatus').innerText = "Recording...";
+      document.getElementById('recordStatus').className = "text-center text-sm font-bold text-red-600 py-2 animate-pulse";
+
+      initVUMeter();
+
+      countdownInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('countdownText').innerText = timeLeft + "s";
+        const pct = ((30 - timeLeft) / 30) * 100;
+        document.getElementById('recordProgress').style.width = pct + "%";
+
+        if (timeLeft <= 0) {
+          stopRecording();
+        }
+      }, 1000);
+    }
+
+    function stopRecording() {
+      if (recognition && isRecording) {
+        recognition.stop();
+      }
+      isRecording = false;
+      clearInterval(countdownInterval);
+      document.getElementById('recIcon').className = "fa-solid fa-microphone";
+      document.getElementById('recordStatus').innerText = "Finished";
+      document.getElementById('recordStatus').className = "text-center text-sm font-bold text-teal-800 py-2";
+
+      if (audioContext && audioContext.state !== 'closed') {
+        audioContext.close();
+      }
+      resetVUMeterVisuals();
+    }
+
+    function resetRecording() {
+      stopRecording();
+      timeLeft = 30;
+      document.getElementById('countdownText').innerText = "30s";
+      document.getElementById('recordProgress').style.width = "0%";
+      document.getElementById('recordStatus').innerText = "Ready to Record";
+      document.getElementById('recordStatus').className = "text-center text-sm font-bold text-slate-500 py-2";
+    }
+
+    function clearTranscript() {
+      transcriptBox.innerText = "";
+      capturedTranscript = "";
+    }
+
+    function initVUMeter() {
+      navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        microphone = audioContext.createMediaStreamSource(stream);
+        javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
+
+        analyser.smoothingTimeConstant = 0.6;
+        analyser.fftSize = 512;
+
+        microphone.connect(analyser);
+        analyser.connect(javascriptNode);
+        javascriptNode.connect(audioContext.destination);
+
+        const bars = document.querySelectorAll('.vu-meter-bar');
+
+        javascriptNode.onaudioprocess = () => {
+          if (!isRecording) return;
+          const array = new Uint8Array(analyser.frequencyBinCount);
+          analyser.getByteFrequencyData(array);
+          let values = 0;
+          for (let i = 0; i < array.length; i++) {
+            values += array[i];
+          }
+          const average = values / array.length;
+          const level = Math.min(16, Math.max(3, Math.round(average / 4)));
+
+          bars.forEach((bar, index) => {
+            const h = Math.max(3, level - (index * 2));
+            bar.style.height = `${h}px`;
+            bar.style.backgroundColor = level > 12 ? '#ef4444' : '#0d8275';
+          });
+        };
+      }).catch(err => {
+        console.warn("Visualizador no disponible:", err);
+      });
+    }
+
+    function resetVUMeterVisuals() {
+      document.querySelectorAll('.vu-meter-bar').forEach(b => {
+        b.style.height = '4px';
+        b.style.backgroundColor = '#94a3b8';
+      });
+    }
+
+    // MOTOR DE EVALUACIÓN B2
+    function evaluateRetelling() {
+      const studentText = transcriptBox.innerText.trim();
+      const currentStory = storiesData[currentIndex];
+
+      if (!studentText || studentText.startsWith("Click the microphone") || studentText.length < 10) {
+        alert("Por favor realiza la grabación de tu retelling antes de presionar evaluar.");
+        return;
+      }
+
+      const modal = document.getElementById('evalModal');
+      const content = document.getElementById('evalContent');
+
+      const words = studentText.split(/\s+/).filter(w => w.length > 0);
+      const wordCount = words.length;
+
+      const lower = studentText.toLowerCase();
+      let matchedKeys = currentStory.keywords.filter(k => lower.includes(k));
+      let coverageRatio = matchedKeys.length / currentStory.keywords.length;
+
+      const hasPastPerfect = /\b(had\s+[a-z]+ed|had\s+been|had\s+never)\b/i.test(studentText);
+      const hasContinuous = /\b(was|were|is|are|will be)\s+[a-z]+ing\b/i.test(studentText);
+      const hasFuturePerfect = /\b(will\s+have|will\s+have\s+been)\b/i.test(studentText);
+      const hasConnectors = /\b(although|even though|because|so|as soon as|once|if|by next|before)\b/i.test(studentText);
+
+      let score = 6.0;
+      if (wordCount >= 20) score += 1.0;
+      if (wordCount >= 35) score += 0.5;
+      if (coverageRatio >= 0.3) score += 1.0;
+      if (coverageRatio >= 0.6) score += 0.5;
+      if (hasPastPerfect || hasFuturePerfect) score += 0.5;
+      if (hasConnectors) score += 0.5;
+      score = Math.min(10.0, score);
+
+      let feedbackNotes = [];
+      if (/\binto the highway\b/i.test(studentText)) {
+        feedbackNotes.push("<strong>Preposición de lugar:</strong> Usaste <em>'into the highway'</em>. La preposición adecuada al circular sobre una carretera es <em>'on the highway'</em>.");
+      }
+      if (/\bthe next summer\b/i.test(studentText) && !/\bby next summer\b/i.test(studentText)) {
+        feedbackNotes.push("<strong>Límite temporal:</strong> Al proyectar hacia el futuro con tiempos perfectos, usa <em>'by next...'</em> en vez de <em>'the next...'</em>.");
+      }
+      if (!hasConnectors) {
+        feedbackNotes.push("<strong>Conectores discursivos:</strong> Intenta conectar más las ideas con conectores B2 (<em>although, even though, as soon as, once</em>).");
+      }
+      if (!hasFuturePerfect && !hasContinuous) {
+        feedbackNotes.push("<strong>Desenlace temporal:</strong> Procura incluir la proyección futura o conclusión de la historia (ej. <em>will have finished, will be ready</em>).");
+      }
+
+      content.innerHTML = `
+        <div class="flex items-center gap-4 bg-teal-50 p-4 rounded-lg border border-teal-200">
+          <div class="text-3xl md:text-4xl font-extrabold text-[#0d8275]">${score.toFixed(1)} <span class="text-lg text-slate-500 font-normal">/ 10</span></div>
+          <div>
+            <div class="font-bold text-slate-800 text-sm md:text-base">Nivel de desempeño: B2</div>
+            <div class="text-xs text-slate-500">${wordCount} palabras transcritas · ${matchedKeys.length} de ${currentStory.keywords.length} conceptos clave detectados</div>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="font-bold text-slate-700 text-xs uppercase tracking-wider mb-1">Tu Retelling (Transcripción):</h3>
+          <p class="p-3 bg-slate-50 rounded border border-slate-200 text-xs md:text-sm text-slate-800 italic leading-relaxed">
+            "${studentText}"
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-bold text-slate-700 text-xs uppercase tracking-wider mb-1.5">Puntos Fuertes:</h3>
+          <ul class="list-disc pl-5 text-xs md:text-sm text-slate-600 space-y-1">
+            <li>${coverageRatio >= 0.4 ? "Buena comprensión global de los hechos y personajes." : "Capacidad de parafrasear con vocabulario propio."}</li>
+            <li>${hasPastPerfect ? "Uso correcto de tiempos pasados y perfectos (<em>had + participio</em>)." : "Continuidad narrativa fluida."}</li>
+            <li>${hasConnectors ? "Cohesión adecuada mediante conectores lógicos." : "Manejo efectivo del tiempo límite de 30 segundos."}</li>
+          </ul>
+        </div>
+
+        ${feedbackNotes.length > 0 ? `
+          <div class="bg-amber-50 border border-amber-200 rounded p-3 text-xs md:text-sm text-amber-900 space-y-1.5">
+            <h4 class="font-bold uppercase tracking-wider text-[11px] text-amber-800">Aspectos a Mejorar:</h4>
+            ${feedbackNotes.map(note => `<div>• ${note}</div>`).join('')}
+          </div>
+        ` : ''}
+
+        <div class="bg-slate-50 border border-slate-200 rounded p-3">
+          <h4 class="font-bold text-slate-700 text-xs uppercase tracking-wider mb-1">Guion original de referencia:</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">${currentStory.text}</p>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('evalModal').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>
