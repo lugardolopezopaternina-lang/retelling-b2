@@ -55,16 +55,16 @@
       <div class="flex items-center gap-2">
         <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Select Item:</span>
         <select id="exerciseSelector" onchange="changeExercise(this.value)" class="text-sm font-semibold bg-slate-50 border border-slate-300 rounded px-3 py-1.5 focus:ring-2 focus:ring-teal-600 outline-none text-slate-700 cursor-pointer">
-          <option value="0">Story 1: Emma in Paris (AUDIOUNO)</option>
-          <option value="1">Story 2: David's Half-Marathon (AUDIODOS)</option>
-          <option value="2">Story 3: Sophie and Mark's Kitchen (AUDIOTRES)</option>
-          <option value="3">Story 4: Lucas's Puppy (AUDIOCUATRO)</option>
-          <option value="4">Story 5: Julian's Mystery Novel (AUDIOCINCO)</option>
-          <option value="5">Story 6: Valeria's Candle Store (AUDIOSEIS)</option>
-          <option value="6">Story 7: Grandpa's Garden (AUDIOSIETE / AUDIOSIFTE)</option>
-          <option value="7">Story 8: Leo's Live Gig (AUDIOOCHO)</option>
-          <option value="8">Story 9: Camila's Computer (AUDIONUEVE)</option>
-          <option value="9">Story 10: Daniel's Healthy Habit (AUDIODIEZ / AUDIODIE7)</option>
+          <option value="0">Story 1: Daniel's Healthy Habit (AUDIOUNO)</option>
+          <option value="1">Story 2: Camila's Computer (AUDIODOS)</option>
+          <option value="2">Story 3: Leo's Live Gig (AUDIOTRES)</option>
+          <option value="3">Story 4: Grandpa's Garden (AUDIOCUATRO)</option>
+          <option value="4">Story 5: Valeria's Candle Store (AUDIOCINCO)</option>
+          <option value="5">Story 6: Julian's Mystery Novel (AUDIOSEIS)</option>
+          <option value="6">Story 7: Lucas's Puppy (AUDIOSIFTE / AUDIOSIETE)</option>
+          <option value="7">Story 8: Sophie and Mark's Kitchen (AUDIOOCHO)</option>
+          <option value="8">Story 9: David's Half-Marathon (AUDIONUEVE)</option>
+          <option value="9">Story 10: Emma in Paris (AUDIODIE7 / AUDIODIEZ)</option>
         </select>
       </div>
 
@@ -74,7 +74,7 @@
       </div>
     </div>
 
-    <!-- Contenedor Principal (2 Columnas) -->
+    <!-- Contenedor Principal -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
       <!-- Columna Izquierda: Altavoz + Módulos PLAY y RECORD -->
@@ -208,84 +208,48 @@
   <audio id="audioPlayer" preload="auto"></audio>
 
   <script>
-    // BASE DE DATOS DE LAS 10 HISTORIAS CON SINÓNIMOS Y CONCEPTOS CLAVE AMPLIADOS
+    // MAPEADO REAL ENTRE ARCHIVOS DE AUDIO SUBIDOS Y SUS GUIONES CORRESPONDIENTES
     const storiesData = [
       {
         id: 1,
-        title: "Emma in Paris",
+        title: "Daniel's Healthy Habit",
         files: ["AUDIOUNO.mp3", "audiouno.mp3"],
-        text: "Emma had never traveled abroad before she decided to sign up for an intensive French course in Paris. She is currently staying with a local family to practice her conversation skills every day, and by next week, she will have completed the first month of the program successfully.",
+        text: "Daniel used to eat fast food almost every evening, but his doctor advised him to change his lifestyle after a routine health check. He has been preparing his own meals with fresh vegetables for three weeks, and if he continues, he will have built a solid healthy habit before holidays start.",
         elements: [
-          { label: "Personaje (Emma / la estudiante)", regex: /\b(emma|woman|girl|student|she)\b/i },
-          { label: "Viaje / París / Curso de francés", regex: /\b(paris|france|french|abroad|course|travel|traveled|study|studying|trip)\b/i },
-          { label: "Familia local / Práctica de conversación", regex: /\b(family|staying|stay|lives|living|practice|practicing|conversation|host)\b/i },
-          { label: "Mes completado / Desenlace próximo", regex: /\b(month|program|finish|finished|completed|complete|next week)\b/i }
+          { label: "Personaje (Daniel / el paciente)", regex: /\b(daniel|man|guy|he|patient)\b/i },
+          { label: "Comida rápida / Doctor / Salud", regex: /\b(fast food|doctor|health|lifestyle|advised|checkup|eat|appointment|habits)\b/i },
+          { label: "Preparar comidas con verduras", regex: /\b(meal|meals|cook|cooking|vegetable|vegetables|fresh|preparing|prepares|food)\b/i },
+          { label: "Hábito saludable / Antes de vacaciones", regex: /\b(habit|healthy|holiday|holidays|built|build|routine|better)\b/i }
         ]
       },
       {
         id: 2,
-        title: "David's Half-Marathon",
+        title: "Camila's Computer",
         files: ["AUDIODOS.mp3", "audiodos.mp3"],
-        text: "David has been running five kilometers every morning because he wants to participate in his city’s annual half-marathon. Although his legs were aching constantly during the first few sessions, he is feeling much stronger now, and if he sticks to his routine, he will be ready for the race by October.",
+        text: "Camila has been trying to organize her computer files all afternoon because her hard drive was running out of storage space. She is backing up all her essential university assignments to the cloud, and once she deletes unnecessary folders, her laptop will be running much faster.",
         elements: [
-          { label: "Personaje (David / el corredor)", regex: /\b(david|man|runner|guy|athlete|he)\b/i },
-          { label: "Entrenamiento / Correr maratón", regex: /\b(run|running|kilometer|kilometers|marathon|race|training|trains)\b/i },
-          { label: "Dolor en piernas / Rutina y mejoría", regex: /\b(leg|legs|ache|aching|pain|hurt|stronger|routine|tired)\b/i },
-          { label: "Preparado para octubre", regex: /\b(october|ready|participate|race|finish)\b/i }
+          { label: "Personaje (Camila / la estudiante)", regex: /\b(camila|girl|student|she|woman)\b/i },
+          { label: "Archivos / Computadora sin espacio", regex: /\b(computer|laptop|file|files|space|storage|drive|disk)\b/i },
+          { label: "Copia en la nube / Tareas de la universidad", regex: /\b(cloud|backup|back up|university|assignments|homework|save)\b/i },
+          { label: "Borrar carpetas para que vaya más rápido", regex: /\b(delete|deletes|folder|folders|faster|fast|speed)\b/i }
         ]
       },
       {
         id: 3,
-        title: "Sophie and Mark's Kitchen",
+        title: "Leo's Live Gig",
         files: ["AUDIOTRES.mp3", "audiotres.mp3"],
-        text: "Sophie and Mark had been planning to remodel their kitchen for over a year before they finally hired a local carpenter. They are currently washing dishes in the bathroom sink while the work continues, but according to the contract, the workers will have finished the entire project by Friday evening.",
+        text: "Leo had been practicing the acoustic guitar for hours every afternoon because his band has an upcoming live gig at a community festival. Although he still feels a bit nervous about performing on stage, his bandmates believe that everyone will have mastered their songs by Friday.",
         elements: [
-          { label: "Personajes (Sophie y Mark / la pareja)", regex: /\b(sophie|mark|couple|they|family|people)\b/i },
-          { label: "Remodelar la cocina / Carpintero", regex: /\b(kitchen|remodel|remodeling|renovat|carpenter|house|home)\b/i },
-          { label: "Lavar platos en el baño", regex: /\b(dish|dishes|bathroom|sink|wash|washing)\b/i },
-          { label: "Terminar la obra el viernes", regex: /\b(friday|contract|workers|finish|finished|project|completed)\b/i }
+          { label: "Personaje (Leo / el músico)", regex: /\b(leo|boy|musician|guitarist|he)\b/i },
+          { label: "Guitarra / Banda / Concierto en festival", regex: /\b(guitar|band|gig|festival|concert|music|practicing)\b/i },
+          { label: "Nervios por tocar en el escenario", regex: /\b(nervous|stage|perform|performing|play|scared)\b/i },
+          { label: "Canciones dominadas para el viernes", regex: /\b(friday|mastered|songs|ready|master|bandmates)\b/i }
         ]
       },
       {
         id: 4,
-        title: "Lucas's Puppy",
-        files: ["AUDIOCUATRO.mp3", "audiocuatro.mp3"],
-        text: "Lucas had never owned a dog before he visited the animal rescue shelter near his neighborhood last Saturday. He is now buying food, toys, and a warm bed, and as soon as the adoption papers are approved, he will be bringing his new puppy home.",
-        elements: [
-          { label: "Personaje (Lucas)", regex: /\b(lucas|boy|man|guy|he)\b/i },
-          { label: "Refugio animal / Adoptar un perro", regex: /\b(dog|puppy|shelter|rescue|adopt|adoption|animal)\b/i },
-          { label: "Comprar suministros (comida, cama, juguetes)", regex: /\b(buy|buying|food|toy|toys|bed|supplies)\b/i },
-          { label: "Papeles aprobados / Llevarlo a casa", regex: /\b(paper|papers|approved|home|bring|bringing|house)\b/i }
-        ]
-      },
-      {
-        id: 5,
-        title: "Julian's Mystery Novel",
-        files: ["AUDIOCINCO.mp3", "audiocinco.mp3"],
-        text: "Julian has been writing a mystery novel in his spare time since he finished university three years ago. Even though he struggles to find enough quiet hours between his regular job and family duties, he expects that he will have written the final chapter before the year ends.",
-        elements: [
-          { label: "Personaje (Julian / el escritor)", regex: /\b(julian|man|writer|author|he)\b/i },
-          { label: "Escribir novela / Libro de misterio", regex: /\b(novel|mystery|book|writing|written|write|story)\b/i },
-          { label: "Poco tiempo / Trabajo regular y familia", regex: /\b(time|job|work|busy|family|spare time|struggle|struggles|hours)\b/i },
-          { label: "Capítulo final / Antes de fin de año", regex: /\b(chapter|final|finish|finished|year ends|year)\b/i }
-        ]
-      },
-      {
-        id: 6,
-        title: "Valeria's Candle Store",
-        files: ["AUDIOSEIS.mp3", "audioseis.mp3"],
-        text: "Valeria had worked in retail customer service for years before she launched an online store selling handmade candles. She is currently packing dozens of orders every weekend, and if sales continue to grow at this rate, she will have recovered her initial investment by December.",
-        elements: [
-          { label: "Personaje (Valeria / la emprendedora)", regex: /\b(valeria|woman|she|entrepreneur)\b/i },
-          { label: "Tienda online / Velas artesanales", regex: /\b(candle|candles|store|business|online|handmade|shop|selling)\b/i },
-          { label: "Empacar pedidos los fines de semana", regex: /\b(pack|packing|order|orders|weekend|weekends|customers)\b/i },
-          { label: "Recuperar inversión en diciembre", regex: /\b(december|invest|investment|sales|money|profit)\b/i }
-        ]
-      },
-      {
-        id: 7,
         title: "Grandpa's Garden",
-        files: ["AUDIOSIFTE.mp3", "AUDIOSIETE.mp3", "audiosiete.mp3"],
+        files: ["AUDIOCUATRO.mp3", "audiocuatro.mp3"],
         text: "Grandpa had ignored the backyard for a long time, but two months ago, he started planting vegetables and herbs. He is watering the tomato plants every morning before the sun gets too hot, and by next month, he will have harvested his first fresh batch of vegetables.",
         elements: [
           { label: "Personaje (Grandpa / el abuelo)", regex: /\b(grandpa|grandfather|old man|he)\b/i },
@@ -295,39 +259,75 @@
         ]
       },
       {
-        id: 8,
-        title: "Leo's Live Gig",
-        files: ["AUDIOOCHO.mp3", "audioocho.mp3"],
-        text: "Leo had been practicing the acoustic guitar for hours every afternoon because his band has an upcoming live gig at a community festival. Although he still feels a bit nervous about performing on stage, his bandmates believe that everyone will have mastered their songs by Friday.",
+        id: 5,
+        title: "Valeria's Candle Store",
+        files: ["AUDIOCINCO.mp3", "audiocinco.mp3"],
+        text: "Valeria had worked in retail customer service for years before she launched an online store selling handmade candles. She is currently packing dozens of orders every weekend, and if sales continue to grow at this rate, she will have recovered her initial investment by December.",
         elements: [
-          { label: "Personaje (Leo / el guitarrista)", regex: /\b(leo|boy|musician|guitarist|he)\b/i },
-          { label: "Guitarra / Banda / Concierto en festival", regex: /\b(guitar|band|gig|festival|concert|music|practicing)\b/i },
-          { label: "Nervios por actuar en el escenario", regex: /\b(nervous|stage|perform|performing|play|scared)\b/i },
-          { label: "Canciones dominadas para el viernes", regex: /\b(friday|mastered|songs|ready|master|bandmates)\b/i }
+          { label: "Personaje (Valeria / la emprendedora)", regex: /\b(valeria|woman|she|entrepreneur)\b/i },
+          { label: "Tienda online / Velas artesanales", regex: /\b(candle|candles|store|business|online|handmade|shop|selling)\b/i },
+          { label: "Empacar pedidos los fines de semana", regex: /\b(pack|packing|order|orders|weekend|weekends|customers)\b/i },
+          { label: "Recuperar inversión en diciembre", regex: /\b(december|invest|investment|sales|money|profit)\b/i }
+        ]
+      },
+      {
+        id: 6,
+        title: "Julian's Mystery Novel",
+        files: ["AUDIOSEIS.mp3", "audioseis.mp3"],
+        text: "Julian has been writing a mystery novel in his spare time since he finished university three years ago. Even though he struggles to find enough quiet hours between his regular job and family duties, he expects that he will have written the final chapter before the year ends.",
+        elements: [
+          { label: "Personaje (Julian / el escritor)", regex: /\b(julian|man|writer|author|he)\b/i },
+          { label: "Escribir novela / Libro de misterio", regex: /\b(novel|mystery|book|writing|written|write|story)\b/i },
+          { label: "Poco tiempo / Trabajo regular y familia", regex: /\b(time|job|work|busy|family|spare time|struggle|struggles|hours)\b/i },
+          { label: "Capítulo final / Antes de fin de año", regex: /\b(chapter|final|finish|finished|year ends|year)\b/i }
+        ]
+      },
+      {
+        id: 7,
+        title: "Lucas's Puppy",
+        files: ["AUDIOSIFTE.mp3", "AUDIOSIETE.mp3", "audiosiete.mp3"],
+        text: "Lucas had never owned a dog before he visited the animal rescue shelter near his neighborhood last Saturday. He is now buying food, toys, and a warm bed, and as soon as the adoption papers are approved, he will be bringing his new puppy home.",
+        elements: [
+          { label: "Personaje (Lucas)", regex: /\b(lucas|boy|man|guy|he)\b/i },
+          { label: "Refugio animal / Adoptar un perro", regex: /\b(dog|puppy|shelter|rescue|adopt|adoption|animal)\b/i },
+          { label: "Comprar suministros (comida, cama, juguetes)", regex: /\b(buy|buying|food|toy|toys|bed|supplies)\b/i },
+          { label: "Papeles aprobados / Llevarlo a casa", regex: /\b(paper|papers|approved|home|bring|bringing|house)\b/i }
+        ]
+      },
+      {
+        id: 8,
+        title: "Sophie and Mark's Kitchen",
+        files: ["AUDIOOCHO.mp3", "audioocho.mp3"],
+        text: "Sophie and Mark had been planning to remodel their kitchen for over a year before they finally hired a local carpenter. They are currently washing dishes in the bathroom sink while the work continues, but according to the contract, the workers will have finished the entire project by Friday evening.",
+        elements: [
+          { label: "Personajes (Sophie y Mark / la pareja)", regex: /\b(sophie|mark|couple|they|family|people)\b/i },
+          { label: "Remodelar la cocina / Carpintero", regex: /\b(kitchen|remodel|remodeling|renovat|carpenter|house|home)\b/i },
+          { label: "Lavar platos en el baño", regex: /\b(dish|dishes|bathroom|sink|wash|washing)\b/i },
+          { label: "Terminar la obra el viernes", regex: /\b(friday|contract|workers|finish|finished|project|completed)\b/i }
         ]
       },
       {
         id: 9,
-        title: "Camila's Computer",
+        title: "David's Half-Marathon",
         files: ["AUDIONUEVE.mp3", "audionueve.mp3"],
-        text: "Camila has been trying to organize her computer files all afternoon because her hard drive was running out of storage space. She is backing up all her essential university assignments to the cloud, and once she deletes unnecessary folders, her laptop will be running much faster.",
+        text: "David has been running five kilometers every morning because he wants to participate in his city’s annual half-marathon. Although his legs were aching constantly during the first few sessions, he is feeling much stronger now, and if he sticks to his routine, he will be ready for the race by October.",
         elements: [
-          { label: "Personaje (Camila / la estudiante)", regex: /\b(camila|girl|student|she)\b/i },
-          { label: "Archivos / Computadora sin espacio", regex: /\b(computer|laptop|file|files|space|storage|drive|disk)\b/i },
-          { label: "Copia en la nube / Tareas de la universidad", regex: /\b(cloud|backup|back up|university|assignments|homework|save)\b/i },
-          { label: "Borrar carpetas para que vaya más rápido", regex: /\b(delete|deletes|folder|folders|faster|fast|speed)\b/i }
+          { label: "Personaje (David / el corredor)", regex: /\b(david|man|runner|guy|athlete|he)\b/i },
+          { label: "Entrenamiento / Correr maratón", regex: /\b(run|running|kilometer|kilometers|marathon|race|training|trains)\b/i },
+          { label: "Dolor en piernas / Rutina y mejoría", regex: /\b(leg|legs|ache|aching|pain|hurt|stronger|routine|tired)\b/i },
+          { label: "Preparado para octubre", regex: /\b(october|ready|participate|race|finish)\b/i }
         ]
       },
       {
         id: 10,
-        title: "Daniel's Healthy Habit",
+        title: "Emma in Paris",
         files: ["AUDIODIE7.mp3", "AUDIODIEZ.mp3", "audiodiez.mp3"],
-        text: "Daniel used to eat fast food almost every evening, but his doctor advised him to change his lifestyle after a routine health check. He has been preparing his own meals with fresh vegetables for three weeks, and if he continues, he will have built a solid healthy habit before holidays start.",
+        text: "Emma had never traveled abroad before she decided to sign up for an intensive French course in Paris. She is currently staying with a local family to practice her conversation skills every day, and by next week, she will have completed the first month of the program successfully.",
         elements: [
-          { label: "Personaje (Daniel)", regex: /\b(daniel|man|guy|he)\b/i },
-          { label: "Comida rápida / Consejo del doctor", regex: /\b(fast food|doctor|health|lifestyle|advised|checkup|eat)\b/i },
-          { label: "Cocinar comidas con verduras frescas", regex: /\b(meal|meals|cook|cooking|vegetable|vegetables|fresh|preparing|food)\b/i },
-          { label: "Hábito saludable / Antes de vacaciones", regex: /\b(habit|healthy|holiday|holidays|built|build|routine)\b/i }
+          { label: "Personaje (Emma / la estudiante)", regex: /\b(emma|woman|girl|student|she)\b/i },
+          { label: "Viaje / París / Curso de francés", regex: /\b(paris|france|french|abroad|course|travel|traveled|study|studying|trip)\b/i },
+          { label: "Familia local / Práctica de conversación", regex: /\b(family|staying|stay|lives|living|practice|practicing|conversation|host)\b/i },
+          { label: "Mes completado / Desenlace próximo", regex: /\b(month|program|finish|finished|completed|complete|next week)\b/i }
         ]
       }
     ];
@@ -564,7 +564,7 @@
     }
 
     // =========================================================================
-    // MOTOR DE EVALUACIÓN PEDAGÓGICA B2 (RIGUROSO Y BASADO EN PARÁFRASIS REAL)
+    // MOTOR DE EVALUACIÓN PEDAGÓGICA B2 RIGUROSO Y FLEXIBLE
     // =========================================================================
     function evaluateRetelling() {
       const studentText = transcriptBox.innerText.trim();
@@ -588,7 +588,7 @@
       const words = studentText.split(/\s+/).filter(w => w.length > 0);
       const wordCount = words.length;
 
-      // 2. TASK COMPLETION: Evaluación de los 4 elementos de la historia (acepta paráfrasis y sinónimos)
+      // 2. TASK COMPLETION: Evaluación de los 4 elementos de la historia
       let matchedElements = [];
       let missingElements = [];
 
@@ -610,10 +610,10 @@
       else if (matchedCount === 4) taskScore = 5.0;
 
       // 3. GRAMMAR SCORE (0 a 3.0 puntos) - Solo cuenta si hay al menos 1 elemento de la historia
-      const hasPast = /\b(had\s+[a-z]+ed|had\s+been|had\s+never|decided|visited|started|used to|were|was|worked|ignored)\b/i.test(studentText);
+      const hasPast = /\b(had\s+[a-z]+ed|had\s+been|had\s+never|decided|visited|started|used to|were|was|worked|ignored|told)\b/i.test(studentText);
       const hasContinuous = /\b(is|are|was|were|will be)\s+[a-z]+ing\b/i.test(studentText);
-      const hasFuturePerfect = /\b(will\s+have|will\s+have\s+been|will\s+be\s+ready)\b/i.test(studentText);
-      const hasConnectors = /\b(although|even though|because|so|before|after|if|by next|once|as soon as)\b/i.test(studentText);
+      const hasFuturePerfect = /\b(will\s+have|will\s+have\s+been|will\s+be\s+ready|will\s+be)\b/i.test(studentText);
+      const hasConnectors = /\b(although|even though|because|so|before|after|if|by next|once|as soon as|but)\b/i.test(studentText);
 
       let grammarScore = 0;
       if (matchedCount > 0) {
@@ -626,13 +626,13 @@
       let fluencyScore = 0;
       if (matchedCount > 0 && !isNonsense) {
         if (wordCount >= 18) fluencyScore += 1.0;
-        if (wordCount >= 32) fluencyScore += 1.0;
+        if (wordCount >= 30) fluencyScore += 1.0;
       }
 
       // 5. TOTALIZACIÓN Y FILTRO DE BLOQUEO TEMÁTICO
       let finalScore = taskScore + grammarScore + fluencyScore;
 
-      // BLOQUEO ABSOLUTO: Si no mencionó ningún elemento de la historia, es reprobación inmediata
+      // REGLA DE BLOQUEO: Si no mencionó ningún elemento de la historia, reprueba
       if (matchedCount === 0) {
         finalScore = Math.min(0.8, (wordCount > 5 ? 0.8 : 0.2));
       } else if (matchedCount === 1) {
@@ -682,11 +682,11 @@
       let strengthsList = [];
       if (finalScore >= 6.5) {
         strengthsList.push(`Identificaste con precisión los eventos clave (${matchedElements.join(', ')}).`);
-        if (hasPast) strengthsList.push("Buen uso de tiempos narrativos pasados.");
-        if (hasFuturePerfect) strengthsList.push("Uso sobresaliente de estructuras de futuro perfecto.");
-        if (hasConnectors) strengthsList.push("Cohesión discursiva adecuada mediante conectores.");
+        if (hasPast) strengthsList.push("Buen uso de tiempos narrativos pasados (<em>used to, told, was</em>).");
+        if (hasFuturePerfect) strengthsList.push("Uso adecuado de proyecciones futuras.");
+        if (hasConnectors) strengthsList.push("Buena conexión lógica de las oraciones.");
       } else if (finalScore >= 4.0) {
-        strengthsList.push(`Lograste captar al menos parte de la idea principal (${matchedElements.join(', ')}).`);
+        strengthsList.push(`Lograste captar la idea principal y el personaje (${matchedElements.join(', ')}).`);
       }
 
       content.innerHTML = `
